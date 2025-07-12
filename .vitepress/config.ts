@@ -15,7 +15,7 @@ const prod = !!process.env.NETLIFY
 export default defineConfig({
   title: 'VitePress',
   base: '/vitepress-docs/',
-  head: [["link", { rel: "icon", href: "/vitepress-logo-mini.svg" }]],
+
   rewrites: {
     'en/:rest*': ':rest*'
   },
@@ -76,11 +76,11 @@ export default defineConfig({
   head: [
     [
       'link',
-      { rel: 'icon', type: 'image/svg+xml', href: '/vitepress-logo-mini.svg' }
+      { rel: 'icon', type: 'image/svg+xml', href: '../public/vitepress-logo-mini.svg' }
     ],
     [
       'link',
-      { rel: 'icon', type: 'image/png', href: '/vitepress-logo-mini.png' }
+      { rel: 'icon', type: 'image/png', href: '../public/vitepress-logo-mini.png' }
     ],
     ['meta', { name: 'theme-color', content: '#5f67ee' }],
     ['meta', { property: 'og:type', content: 'website' }],
