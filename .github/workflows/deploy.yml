@@ -30,7 +30,7 @@ jobs:
       - name: 安装 Node.js（并启用 yarn 缓存）
         uses: actions/setup-node@v4
         with:
-          node-version: 18       # 使用 Node.js v18
+          node-version: 20       # 使用 Node.js v20
           cache: yarn            # 自动缓存 yarn 安装的依赖，提升速度
 
       - name: 配置 GitHub Pages 环境
