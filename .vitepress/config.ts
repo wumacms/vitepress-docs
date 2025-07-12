@@ -15,6 +15,7 @@ const prod = !!process.env.NETLIFY
 export default defineConfig({
   title: 'VitePress',
   base: '/vitepress-docs/',
+  head: [["link", { rel: "icon", href: "/vitepress-logo-mini.svg" }]],
   rewrites: {
     'en/:rest*': ':rest*'
   },

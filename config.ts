@@ -7,7 +7,6 @@ const pkg = require('vitepress/package.json')
 export default defineAdditionalConfig({
   lang: 'en-US',
   description: 'Vite & Vue powered static site generator.',
-  head: [["link", { rel: "icon", href: "/vitepress-logo-mini.svg" }]],
   themeConfig: {
     nav: nav(),
 
