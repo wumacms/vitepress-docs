@@ -1,0 +1,38 @@
+# Node.js 依赖
+node_modules/
+.pnpm/
+
+# 生产构建输出目录（vitepress build 生成）
+.vitepress/dist/
+
+# 临时构建缓存（Vite、VitePress）
+.vitepress/cache/
+.vite/
+.temp/
+.temp_ts/
+.vscode-test/
+
+# 编辑器/IDE 文件
+*.log
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.sw?
+
+# Yarn / pnpm 锁文件（根据你使用的工具保留一个）
+yarn.lock
+# pnpm-lock.yaml
+
+# 本地环境变量（如有）
+.env.local
+.env.*.local
+
+# Mac 系统自动生成文件
+._*
+.Spotlight-V100
+.Trashes
+
+# VitePress 插件可能生成的临时文件
+*.local.svg
