@@ -22,8 +22,8 @@ Thumbs.db
 *.sw?
 
 # Yarn / pnpm 锁文件（根据你使用的工具保留一个）
-yarn.lock
-# pnpm-lock.yaml
+# yarn.lock
+pnpm-lock.yaml
 
 # 本地环境变量（如有）
 .env.local
