@@ -1,65 +1,66 @@
+# 构建 VitePress 站点并将其部署到 GitHub Pages 的示例工作流程
+#
 name: Deploy VitePress site to Pages
 
-# 当推送到 main 分支时触发部署流程
 on:
+  # 在针对 `main` 分支的推送上运行。如果你
+  # 使用 `master` 分支作为默认分支，请将其更改为 `master`
   push:
     branches: [main]
 
-# 设置 GitHub Pages 部署所需权限
-permissions:
-  contents: read           # 允许读取代码内容
-  pages: write             # 允许写入 Pages 部署内容
-  id-token: write          # 允许生成 OIDC token，用于身份验证等
+  # 允许你从 Actions 选项卡手动运行此工作流程
+  workflow_dispatch:
 
-# 限制并发：只允许一个 Pages 构建任务运行，避免重复部署
+# 设置 GITHUB_TOKEN 的权限，以允许部署到 GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 只允许同时进行一次部署，跳过正在运行和最新队列之间的运行队列
+# 但是，不要取消正在进行的运行，因为我们希望允许这些生产部署完成
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  # 构建网站的任务
+  # 构建工作
   build:
-    runs-on: ubuntu-latest  # 使用 GitHub 提供的最新版 Ubuntu 环境
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout 源代码
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 完整克隆仓库（如果你用到了 git 时间戳）
-
-      - name: 安装 Node.js（并启用 yarn 缓存）
+          fetch-depth: 0 # 如果未启用 lastUpdated，则不需要
+      # - uses: pnpm/action-setup@v3 # 如果使用 pnpm，请取消此区域注释
+      #   with:
+      #     version: 9
+      # - uses: oven-sh/setup-bun@v1 # 如果使用 Bun，请取消注释
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20       # 使用 Node.js v20
-          cache: yarn            # 自动缓存 yarn 安装的依赖，提升速度
-
-      - name: 配置 GitHub Pages 环境
-        uses: actions/configure-pages@v4  # 自动设置 GitHub Pages 相关的环境变量
-
-      - name: 安装依赖
-        run: yarn install  # 使用 yarn 安装项目依赖
-
-      - name: 构建 VitePress 网站
-        run: |
-          yarn build       # 调用 package.json 中的 "build": "vitepress build"
-          touch .nojekyll  # 防止 GitHub Pages 使用 Jekyll 处理静态资源（必须）
-
-      - name: 上传构建产物
+          node-version: 22
+          cache: yarn # 或 pnpm / yarn
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Install dependencies
+        run: yarn install # 或 pnpm install / yarn install / bun install
+      - name: Build with VitePress
+        run: yarn build # 或 pnpm docs:build / yarn docs:build / bun run docs:build
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .vitepress/dist  # 指定构建后的输出目录为 .vitepress/dist
+          path: .vitepress/dist # 指定构建后的输出目录
 
-  # 部署任务（依赖构建任务完成）
+  # 部署工作
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}  # 输出部署后的 URL
-
-    needs: build             # 在构建任务完成之后再运行部署
-    runs-on: ubuntu-latest   # 同样使用 Ubuntu 环境
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
     name: Deploy
-
     steps:
-      - name: 部署到 GitHub Pages
+      - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4  # 使用官方动作将 artifact 部署到 Pages
+        uses: actions/deploy-pages@v4
